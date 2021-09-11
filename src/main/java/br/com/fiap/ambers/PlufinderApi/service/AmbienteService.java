@@ -1,44 +1,39 @@
 package br.com.fiap.ambers.PlufinderApi.service;
 
+import java.util.Optional;
+
 import javax.persistence.EntityManager;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import br.com.fiap.tds.dao.AmbienteDao;
-import br.com.fiap.tds.dao.impl.AmbienteDaoImpl;
-import br.com.fiap.tds.entity.Ambiente;
-import br.com.fiap.tds.exception.CommitException;
-import br.com.fiap.tds.exception.EntityNotFoundException;
-import br.com.fiap.tds.singleton.EntityManagerFactorySingleton;
+import br.com.fiap.ambers.PlufinderApi.entity.Ambiente;
+import br.com.fiap.ambers.PlufinderApi.exception.CommitException;
+import br.com.fiap.ambers.PlufinderApi.exception.EntityNotFoundException;
+import br.com.fiap.ambers.PlufinderApi.repository.AmbienteRepository;
 
 @Component
 public class AmbienteService {
 	
-	EntityManager em;
-	AmbienteDao ambienteDao;
+	@Autowired
+	AmbienteRepository repository;
 	
-	AmbienteService() {
-		 this.em = EntityManagerFactorySingleton.getInstance().createEntityManager();
-		 this.ambienteDao = new AmbienteDaoImpl(em);
-	}
-	
-	public Ambiente buscarPorId(Long id) throws EntityNotFoundException {
-		return ambienteDao.read(id);
+	public Optional<Ambiente> buscarPorId(Long id) throws EntityNotFoundException {
+		return repository.findById(id);
 	}
 	
 	public void incluirAmbiente(Ambiente ambiente) throws CommitException {
-		ambienteDao.create(ambiente);
-		ambienteDao.commit();
+		repository.save(ambiente);
 	}
 	
 	public void alterarAmbiente(Ambiente ambiente) throws CommitException {
-		ambienteDao.update(ambiente);
-		ambienteDao.commit();
+		if (repository.existsById(ambiente.getId()));
+			repository.save(ambiente);
 	}
 	
 	public void excluirAmbiente(Long id) throws CommitException, EntityNotFoundException {
-		ambienteDao.delete(id);
-		ambienteDao.commit();
+		if (repository.existsById(id));
+		repository.deleteById(id);
 	}
 	
 	

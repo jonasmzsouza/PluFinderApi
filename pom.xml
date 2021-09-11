@@ -58,6 +58,10 @@
 			<version>2.4.2</version>
 		</dependency>
 		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>br.com.fiap.tds</groupId>
 			<artifactId>Backend-Ambers</artifactId>
 			<version>1.0.0-SNAPSHOT</version>
