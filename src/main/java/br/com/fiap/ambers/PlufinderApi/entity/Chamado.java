@@ -1,4 +1,4 @@
-/** MANUTEN��O DE FONTE
+/** MANUTENCAO DE FONTE
  * @author Gabriel
  * @Description Implementa��o dos relacionamentos
  * @Date 11/05/2021
@@ -28,8 +28,9 @@ import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.CreationTimestamp;
 
-import br.com.fiap.tds.enumeration.ChamadoEnum;
-import br.com.fiap.tds.enumeration.StatusEnum;
+import br.com.fiap.ambers.PlufinderApi.enumeration.ChamadoEnum;
+import br.com.fiap.ambers.PlufinderApi.enumeration.StatusEnum;
+
 
 @Entity
 @Table(name = "T_CHAMADO")

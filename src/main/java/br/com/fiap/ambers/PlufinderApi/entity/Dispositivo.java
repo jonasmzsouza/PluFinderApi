@@ -22,7 +22,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import br.com.fiap.tds.enumeration.TipoDispositivoEnum;
+import br.com.fiap.ambers.PlufinderApi.enumeration.TipoDispositivoEnum;
 
 @Entity
 @Table(name = "T_DISPOSITIVO")
