@@ -1,5 +1,6 @@
 package br.com.fiap.ambers.PlufinderApi.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import javax.persistence.EntityManager;
@@ -17,6 +18,10 @@ public class AmbienteService {
 	
 	@Autowired
 	AmbienteRepository repository;
+	
+	public List<Ambiente> buscarTodos() {
+		return repository.findAll();
+	}
 	
 	public Optional<Ambiente> buscarPorId(Long id) throws EntityNotFoundException {
 		return repository.findById(id);

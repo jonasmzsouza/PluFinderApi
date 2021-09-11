@@ -1,5 +1,6 @@
 package br.com.fiap.ambers.PlufinderApi.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,10 @@ public class SetorService {
 
 	@Autowired
 	SetorRepository repository;
+
+	public List<Setor> buscarTodos() {
+		return repository.findAll();
+	}
 
 	public Optional<Setor> buscarPorId(Long id) throws EntityNotFoundException {
 		return repository.findById(id);
