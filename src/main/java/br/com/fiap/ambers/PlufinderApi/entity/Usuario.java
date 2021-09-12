@@ -67,17 +67,6 @@ public class Usuario {
 				inverseJoinColumns = @JoinColumn(name="id_chamado"))
 	private List<Chamado> chamados;
 
-	public Usuario(Cargo cargo, Setor setor, String nome) {
-		this.cargo = cargo;
-		this.setor = setor;
-		this.nome = nome;
-	}
-
-	public Usuario(Long id, Cargo cargo, Setor setor, String nome) {
-		this(cargo, setor, nome);
-		this.id = id;
-	}
-
 	public Long getId() {
 		return id;
 	}
@@ -132,6 +121,12 @@ public class Usuario {
 
 	public void setChamados(List<Chamado> chamados) {
 		this.chamados = chamados;
+	}
+
+	public Usuario(String nome2, Setor setor2, Cargo cargo2) {
+		this.nome = nome2;
+		this.setor = setor2;
+		this.cargo = cargo2;
 	} 
 
 }
