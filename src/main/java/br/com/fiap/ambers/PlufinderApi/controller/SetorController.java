@@ -8,6 +8,8 @@ import java.util.Optional;
 import javax.validation.Valid;
 
 import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
+import org.modelmapper.spi.MatchingStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -54,15 +56,16 @@ public class SetorController {
 	
 	@GetMapping("{id}")
 	@Cacheable("setores")
-	public ResponseEntity<SaidaConsultaSetorDto> buscarPorCodigo(@PathVariable Long codigo) {
+	public ResponseEntity<SaidaConsultaSetorDto> buscarPorCodigo(@PathVariable Long id) {
 		ModelMapper mapper = new ModelMapper();
-		mapper.getConfiguration().setAmbiguityIgnored(true);
+		mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 		SaidaConsultaSetorDto retorno = new SaidaConsultaSetorDto();
 		try {
-			Optional<Setor> setor = service.buscarPorId(codigo);
+			Optional<Setor> setor = service.buscarPorId(id);
 			
 			if(setor.isPresent())
-			mapper.map(setor, retorno);
+			retorno.setId(setor.get().getId());
+			retorno.setNome(setor.get().getNome());
 		} catch (EntityNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
