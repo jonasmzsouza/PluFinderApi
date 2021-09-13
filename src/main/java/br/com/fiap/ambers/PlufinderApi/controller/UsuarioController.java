@@ -28,6 +28,9 @@ import br.com.fiap.ambers.PlufinderApi.entity.Usuario;
 import br.com.fiap.ambers.PlufinderApi.exception.CommitException;
 import br.com.fiap.ambers.PlufinderApi.exception.EntityNotFoundException;
 import br.com.fiap.ambers.PlufinderApi.outDto.SaidaConsultaUsuarioDto;
+import br.com.fiap.ambers.PlufinderApi.service.AmbienteService;
+import br.com.fiap.ambers.PlufinderApi.service.CargoService;
+import br.com.fiap.ambers.PlufinderApi.service.SetorService;
 import br.com.fiap.ambers.PlufinderApi.service.UsuarioService;
 
 @RestController
@@ -36,6 +39,15 @@ public class UsuarioController {
 	
 	@Autowired
 	UsuarioService service;
+	
+	@Autowired
+	SetorService setorService;
+	
+	@Autowired
+	AmbienteService ambienteService;
+	
+	@Autowired
+	CargoService cargoService;
 	
 	@GetMapping
 	public ResponseEntity<List<SaidaConsultaUsuarioDto>> buscarTodos() {
@@ -77,11 +89,14 @@ public class UsuarioController {
 			UriComponentsBuilder uriBuilder) {
 		
 		try {
-			Setor setor = new Setor(entrada.getSetor(), null);
-			Cargo cargo = new Cargo(entrada.getCargo(), null);
-			service.incluirUsuario(new Usuario(entrada.getNome(), setor, cargo));
+			Optional<Setor> setor = setorService.buscarPorId(entrada.getSetor());
+			Optional<Cargo> cargo = cargoService.buscarPorId(entrada.getCargo());
+			service.incluirUsuario(new Usuario(entrada.getNome(), setor.get(), cargo.get()));
 		} catch (CommitException e) {
 			return ResponseEntity.internalServerError().build();
+		} catch (EntityNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
 		URI uri = uriBuilder.path("/usuario/{nome}").buildAndExpand(entrada.getNome()).toUri();
