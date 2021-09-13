@@ -48,7 +48,6 @@ public class AmbienteController {
 			List<Ambiente> ambientes = ambienteService.buscarTodos();
 			
 			ModelMapper mapper = new ModelMapper();
-			mapper.getConfiguration().setAmbiguityIgnored(true);
 			for(Ambiente ambiente : ambientes) {
 				retorno.add(mapper.map(ambiente, SaídaConsultaAmbienteDto.class));
 			}
@@ -69,11 +68,9 @@ public class AmbienteController {
 			if(ambiente.isPresent())
 			mapper.map(ambiente, retorno);
 		} catch (EntityNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			return ResponseEntity.notFound().build();
 		}
-		
-		
+			
 		return ResponseEntity.ok(retorno);
 	}
 
@@ -86,8 +83,7 @@ public class AmbienteController {
 			ambienteService.incluirAmbiente(new Ambiente(setor, entrada.getNome(), entrada.getAndar(),
 					entrada.getTamanho(), entrada.getNumeroProximidade(), entrada.getNomeLocalizacao()));
 		} catch (CommitException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			return ResponseEntity.notFound().build();
 		}
 		
 		URI uri = uriBuilder.path("/ambiente/{nome}").buildAndExpand(entrada.getNome()).toUri();
@@ -120,11 +116,9 @@ public class AmbienteController {
 		
 		ambienteService.alterarAmbiente(novoAmbiente);
 		} catch (CommitException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			return ResponseEntity.notFound().build();
 		} catch (EntityNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			return ResponseEntity.notFound().build();
 		}
 		
 		return ResponseEntity.ok(entrada);

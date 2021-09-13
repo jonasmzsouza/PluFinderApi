@@ -68,7 +68,6 @@ public class UsuarioController {
 	@GetMapping("{id}")
 	public ResponseEntity<SaidaConsultaUsuarioDto> buscarPorCodigo(@PathVariable Long id) {
 		ModelMapper mapper = new ModelMapper();
-		mapper.getConfiguration().setAmbiguityIgnored(true);
 		SaidaConsultaUsuarioDto retorno = new SaidaConsultaUsuarioDto();
 		try {
 			Optional<Usuario> usuario = service.buscarPorId(id);
@@ -76,10 +75,8 @@ public class UsuarioController {
 			if(usuario.isPresent())
 			retorno = mapper.map(usuario.get(), SaidaConsultaUsuarioDto.class);
 		} catch (EntityNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ResponseEntity.notFound().build();
 		}
-		
 		
 		return ResponseEntity.ok(retorno);
 	}
@@ -95,14 +92,12 @@ public class UsuarioController {
 		} catch (CommitException e) {
 			return ResponseEntity.internalServerError().build();
 		} catch (EntityNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			return ResponseEntity.notFound().build();
 		}
 		
 		URI uri = uriBuilder.path("/usuario/{nome}").buildAndExpand(entrada.getNome()).toUri();
 
 		return ResponseEntity.created(uri).body(entrada);
-
 	}
 	
 	@PutMapping("{id}")
@@ -118,19 +113,19 @@ public class UsuarioController {
 		if(usuario.isEmpty())
 			return ResponseEntity.notFound().build();
 		
+		Optional<Cargo> cargo = cargoService.buscarPorId(entrada.getCargo());
+		Optional<Setor> setor = setorService.buscarPorId(entrada.getSetor());
 		Usuario novoUsuario = usuario.get();
 		
 		novoUsuario.setNome(entrada.getNome());
-		novoUsuario.getCargo().setId(entrada.getCargo());
-		novoUsuario.getSetor().setId(entrada.getSetor());
+		novoUsuario.setCargo(cargo.get());
+		novoUsuario.setSetor(setor.get());
 		
 		service.alterarUsuario(novoUsuario);
 		} catch (CommitException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			return ResponseEntity.internalServerError().build();
 		} catch (EntityNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			return ResponseEntity.notFound().build();
 		}
 		
 		return ResponseEntity.ok(entrada);
@@ -150,6 +145,7 @@ public class UsuarioController {
 		} catch (EntityNotFoundException e) {
 			return ResponseEntity.notFound().build();
 		} catch (CommitException e) {
+			ResponseEntity.internalServerError().body(e.getMessage());
 			return ResponseEntity.internalServerError().build();
 		}
 		

@@ -48,7 +48,7 @@ public class CargoController {
 				retorno.add(new SaidaConsultaCargoDto(cargo));
 			}
 		} catch (Exception e) {
-			// TODO: handle exception
+			ResponseEntity.internalServerError().build();
 		}
 		return ResponseEntity.ok(retorno);
 	}
@@ -65,11 +65,9 @@ public class CargoController {
 			if(cargo.isPresent())
 				retorno = new SaidaConsultaCargoDto(cargo.get());
 		} catch (EntityNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ResponseEntity.notFound().build();
 		}
-		
-		
+			
 		return ResponseEntity.ok(retorno);
 	}
 	
@@ -81,7 +79,6 @@ public class CargoController {
 		try {
 			service.incluirCargo(new Cargo(entrada.getNome()));
 		} catch (CommitException e) {
-			// TODO Auto-generated catch block
 			ResponseEntity.internalServerError().body(e.getMessage());
 		}
 		URI uri = uriBuilder
@@ -90,7 +87,6 @@ public class CargoController {
 				.toUri();
 		
 		return ResponseEntity.created(uri).body(entrada);
-		
 	}
 	
 	@PutMapping("{id}")
@@ -112,11 +108,9 @@ public class CargoController {
 		
 			service.alterarCargo(novoCargo);
 		} catch (CommitException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ResponseEntity.internalServerError().build();
 		} catch (EntityNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ResponseEntity.notFound().build();
 		}
 		
 		return ResponseEntity.ok(entrada);
