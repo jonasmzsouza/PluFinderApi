@@ -7,9 +7,15 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class SaidaConsultaAmbientePorCodigo {
-
+public class SaídaConsultaAmbienteDto {
+	
+	@JsonProperty("id")
+	private String id;
+	
 	@JsonProperty("nome")
 	private String nome;
 	
+	@JsonProperty("setor")
+	private SaidaConsultaSetorDto setor;
+
 }

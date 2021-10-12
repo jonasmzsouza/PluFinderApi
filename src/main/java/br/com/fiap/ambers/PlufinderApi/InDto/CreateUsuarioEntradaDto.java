@@ -9,6 +9,12 @@ import lombok.Setter;
 @Setter
 public class CreateUsuarioEntradaDto {
 	
+	@JsonProperty("idCargo")
+	private Long cargo;
+	
+	@JsonProperty("idSetor")
+	private Long setor;
+
 	@JsonProperty("nome")
 	private String nome;
 

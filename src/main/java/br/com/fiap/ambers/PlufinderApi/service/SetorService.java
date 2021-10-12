@@ -1,43 +1,41 @@
 package br.com.fiap.ambers.PlufinderApi.service;
 
-import javax.persistence.EntityManager;
+import java.util.List;
+import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import br.com.fiap.tds.dao.SetorDao;
-import br.com.fiap.tds.dao.impl.SetorDaoImpl;
-import br.com.fiap.tds.entity.Setor;
-import br.com.fiap.tds.exception.CommitException;
-import br.com.fiap.tds.exception.EntityNotFoundException;
-import br.com.fiap.tds.singleton.EntityManagerFactorySingleton;
+import br.com.fiap.ambers.PlufinderApi.entity.Setor;
+import br.com.fiap.ambers.PlufinderApi.exception.CommitException;
+import br.com.fiap.ambers.PlufinderApi.exception.EntityNotFoundException;
+import br.com.fiap.ambers.PlufinderApi.repository.SetorRepository;
 
 @Component
 public class SetorService {
 
-	EntityManager em;
-	SetorDao setorDao;
+	@Autowired
+	SetorRepository repository;
 
-	SetorService() {
-		this.em = EntityManagerFactorySingleton.getInstance().createEntityManager();
-		this.setorDao = new SetorDaoImpl(em);
+	public List<Setor> buscarTodos() {
+		return repository.findAll();
 	}
 
-	public Setor buscarPorId(Long id) throws EntityNotFoundException {
-		return setorDao.read(id);
+	public Optional<Setor> buscarPorId(Long id) throws EntityNotFoundException {
+		return repository.findById(id);
 	}
 
 	public void incluirSetor(Setor setor) throws CommitException {
-		setorDao.create(setor);
-		setorDao.commit();
+		repository.save(setor);
 	}
-	
+
 	public void alterarSetor(Setor setor) throws CommitException {
-		setorDao.update(setor);
-		setorDao.commit();
+		if (repository.existsById(setor.getId()))
+			repository.save(setor);
 	}
-	
+
 	public void excluirSetor(Long id) throws EntityNotFoundException, CommitException {
-		setorDao.delete(id);
-		setorDao.commit();
+		if (repository.existsById(id))
+			repository.deleteById(id);
 	}
 }
