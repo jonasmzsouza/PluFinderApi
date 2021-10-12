@@ -27,7 +27,7 @@ import br.com.fiap.ambers.PlufinderApi.entity.Ambiente;
 import br.com.fiap.ambers.PlufinderApi.entity.Setor;
 import br.com.fiap.ambers.PlufinderApi.exception.CommitException;
 import br.com.fiap.ambers.PlufinderApi.exception.EntityNotFoundException;
-import br.com.fiap.ambers.PlufinderApi.outDto.SaídaConsultaAmbienteDto;
+import br.com.fiap.ambers.PlufinderApi.outDto.SaidaConsultaAmbienteDto;
 import br.com.fiap.ambers.PlufinderApi.service.AmbienteService;
 import br.com.fiap.ambers.PlufinderApi.service.SetorService;
 
@@ -42,14 +42,14 @@ public class AmbienteController {
 	SetorService setorService;
 	
 	@GetMapping
-	public ResponseEntity<List<SaídaConsultaAmbienteDto>> buscarTodos() {
-		List<SaídaConsultaAmbienteDto> retorno = new ArrayList<SaídaConsultaAmbienteDto>();
+	public ResponseEntity<List<SaidaConsultaAmbienteDto>> buscarTodos() {
+		List<SaidaConsultaAmbienteDto> retorno = new ArrayList<SaidaConsultaAmbienteDto>();
 		try {
 			List<Ambiente> ambientes = ambienteService.buscarTodos();
 			
 			ModelMapper mapper = new ModelMapper();
 			for(Ambiente ambiente : ambientes) {
-				retorno.add(mapper.map(ambiente, SaídaConsultaAmbienteDto.class));
+				retorno.add(mapper.map(ambiente, SaidaConsultaAmbienteDto.class));
 			}
 		} catch (Exception e) {
 			return ResponseEntity.internalServerError().body(null);
@@ -58,10 +58,10 @@ public class AmbienteController {
 	}
 	
 	@GetMapping("{id}")
-	public ResponseEntity<SaídaConsultaAmbienteDto> buscarPorCodigo(@PathVariable Long id) {
+	public ResponseEntity<SaidaConsultaAmbienteDto> buscarPorCodigo(@PathVariable Long id) {
 		ModelMapper mapper = new ModelMapper();
 		mapper.getConfiguration().setAmbiguityIgnored(true);
-		SaídaConsultaAmbienteDto retorno = new SaídaConsultaAmbienteDto();
+		SaidaConsultaAmbienteDto retorno = new SaidaConsultaAmbienteDto();
 		try {
 			Optional<Ambiente> ambiente = ambienteService.buscarPorId(id);
 			

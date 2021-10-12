@@ -7,14 +7,14 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class SaídaConsultaAmbienteDto {
-	
+public class SaidaConsultaAmbienteDto {
+
 	@JsonProperty("id")
 	private String id;
-	
+
 	@JsonProperty("nome")
 	private String nome;
-	
+
 	@JsonProperty("setor")
 	private SaidaConsultaSetorDto setor;
 
