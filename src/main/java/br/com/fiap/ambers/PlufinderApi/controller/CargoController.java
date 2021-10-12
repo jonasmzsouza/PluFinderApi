@@ -38,7 +38,6 @@ public class CargoController {
 	CargoService service;
 	
 	@GetMapping
-	@Cacheable("cargos")
 	public ResponseEntity<List<SaidaConsultaCargoDto>> buscarTodos() {
 		List<SaidaConsultaCargoDto> retorno = new ArrayList<SaidaConsultaCargoDto>();
 		try {
@@ -54,7 +53,6 @@ public class CargoController {
 	}
 	
 	@GetMapping("{id}")
-	@Cacheable("cargos")
 	public ResponseEntity<SaidaConsultaCargoDto> buscarPorCodigo(@PathVariable Long id) {
 		ModelMapper mapper = new ModelMapper();
 		mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);

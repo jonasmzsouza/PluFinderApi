@@ -39,7 +39,6 @@ public class SetorController {
 	SetorService service;
 	
 	@GetMapping
-	@Cacheable("setores")
 	public ResponseEntity<List<SaidaConsultaSetorDto>> buscarTodos() {
 		List<SaidaConsultaSetorDto> retorno = new ArrayList<SaidaConsultaSetorDto>();
 		try {
@@ -55,7 +54,6 @@ public class SetorController {
 	}
 	
 	@GetMapping("{id}")
-	@Cacheable("setores")
 	public ResponseEntity<SaidaConsultaSetorDto> buscarPorCodigo(@PathVariable Long id) {
 		ModelMapper mapper = new ModelMapper();
 		mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
