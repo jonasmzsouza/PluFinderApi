@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import br.com.fiap.ambers.PlufinderApi.entity.Ambiente;
 import br.com.fiap.ambers.PlufinderApi.entity.Usuario;
@@ -12,7 +13,7 @@ import br.com.fiap.ambers.PlufinderApi.exception.CommitException;
 import br.com.fiap.ambers.PlufinderApi.exception.EntityNotFoundException;
 import br.com.fiap.ambers.PlufinderApi.repository.UsuarioRepository;
 
-@Component
+@Service
 public class UsuarioService {
 	
 	@Autowired

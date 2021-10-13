@@ -10,6 +10,7 @@
 
 package br.com.fiap.ambers.PlufinderApi.entity;
 
+import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -27,6 +28,9 @@ import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -37,7 +41,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "T_USUARIO")
 @SequenceGenerator(name = "usuario", sequenceName="SQ_T_USUARIO", allocationSize = 1)
-public class Usuario {
+public class Usuario implements UserDetails {
 	
 	@Id
 	@Column(name="id_usuario", length = 10, nullable = false)
@@ -127,6 +131,45 @@ public class Usuario {
 		this.nome = nome2;
 		this.setor = setor2;
 		this.cargo = cargo2;
+	}
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getPassword() {
+		return this.login.getSenha();
+	}
+
+	@Override
+	public String getUsername() {
+		return this.login.getEmail();
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		// TODO Auto-generated method stub
+		return true;
 	} 
 
 }
