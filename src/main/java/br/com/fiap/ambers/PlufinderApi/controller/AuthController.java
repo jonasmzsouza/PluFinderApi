@@ -13,6 +13,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 
 import br.com.fiap.ambers.PlufinderApi.InDto.CredentialDto;
+import br.com.fiap.ambers.PlufinderApi.InDto.LoginEntradaDto;
+import br.com.fiap.ambers.PlufinderApi.outDto.SaidaAuthenticationTokensDto;
+import br.com.fiap.ambers.PlufinderApi.service.RefreshTokenService;
 import br.com.fiap.ambers.PlufinderApi.service.TokenService;
 
 @RestController
@@ -25,8 +28,10 @@ public class AuthController {
 	@Autowired
 	private TokenService tokenService;
 	
+	@Autowired RefreshTokenService refreshTokenService;
+	
 	@PostMapping
-	public ResponseEntity<String> auth(@RequestBody CredentialDto credential ) {
+	public ResponseEntity<SaidaAuthenticationTokensDto> auth(@RequestBody LoginEntradaDto credential ) {
 		UsernamePasswordAuthenticationToken auth = 
 				new UsernamePasswordAuthenticationToken(credential.getUsername(), credential.getPassword());
 		
@@ -34,8 +39,11 @@ public class AuthController {
 			
 			Authentication authenticate = authManager.authenticate(auth);
 			String token = tokenService.createToken(authenticate);
+			String refreshToken = refreshTokenService.generateRefreshToken(authenticate);
 			
-			return ResponseEntity.ok(token);
+			SaidaAuthenticationTokensDto retorno = new SaidaAuthenticationTokensDto(token, refreshToken);
+			
+			return ResponseEntity.ok(retorno);
 					
 		} catch (AuthenticationException e) {
 			return ResponseEntity.badRequest().build();

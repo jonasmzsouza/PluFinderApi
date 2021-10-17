@@ -2,11 +2,13 @@ package br.com.fiap.ambers.PlufinderApi.service;
 
 import java.util.Date;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import br.com.fiap.ambers.PlufinderApi.entity.Login;
+import br.com.fiap.ambers.PlufinderApi.entity.RefreshToken;
 import br.com.fiap.ambers.PlufinderApi.entity.Usuario;
 
 import io.jsonwebtoken.Claims;
@@ -25,30 +27,40 @@ public class TokenService {
 
 	@Value("${plufinderapi.jwt.secret}")
 	private String secret;
+	
+	@Autowired
+	private RefreshTokenService refreshTokenService;
+	
+	public String createToken(RefreshToken refreshToken) {
+		return this.generateToken(refreshToken.getLogin());
+	}
 
 	public String createToken(Authentication authenticate) {
-
-		Login user = (Login) authenticate.getPrincipal();
-
+		Login user = (Login) authenticate.getPrincipal();		
+		return this.generateToken(user);
+	}
+	
+	public String generateToken(Login user) {
 		Date today = new Date();
 		Date expirationDate = new Date(today.getTime() + duration);
-
-		String token = Jwts.builder()
+		
+		return Jwts.builder()
 				.setIssuer("PluFinderApi")
 				.setSubject(user.getId()
 						.toString())
 				.setIssuedAt(today)
 				.setExpiration(expirationDate).signWith(SignatureAlgorithm.HS256, secret).compact();
-
-		return token;
 	}
 
 	public boolean valid(String token) {
 		try {
 			Jwts.parser().setSigningKey(secret).parseClaimsJws(token);
+			
 			return true;
-		} catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException | SignatureException
+		} catch (UnsupportedJwtException | MalformedJwtException | SignatureException
 				| IllegalArgumentException e) {
+			return false;
+		} catch (ExpiredJwtException e) {
 			return false;
 		}
 	}

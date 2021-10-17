@@ -5,7 +5,8 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import br.com.fiap.ambers.PlufinderApi.entity.Login;
+import br.com.fiap.ambers.PlufinderApi.entity.RefreshToken;
 
-public interface LoginRepository extends JpaRepository<Login, Long> {	
-	Optional<Login> findByEmail(String email);
+public interface RefreshTokenRepository extends JpaRepository<RefreshToken, String> {
+	Optional<RefreshToken> findByLogin(Login login);
 }
