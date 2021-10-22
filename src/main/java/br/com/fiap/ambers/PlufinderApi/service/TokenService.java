@@ -46,7 +46,7 @@ public class TokenService {
 		
 		return Jwts.builder()
 				.setIssuer("PluFinderApi")
-				.setSubject(user.getId()
+				.setSubject(user.getUsuario().getId()
 						.toString())
 				.setIssuedAt(today)
 				.setExpiration(expirationDate).signWith(SignatureAlgorithm.HS256, secret).compact();

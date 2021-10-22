@@ -10,6 +10,7 @@
 
 package br.com.fiap.ambers.PlufinderApi.entity;
 
+import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.List;
 
@@ -20,7 +21,9 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -28,13 +31,18 @@ import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import br.com.fiap.ambers.PlufinderApi.InDto.CreateChamadoEntradaDto;
 import br.com.fiap.ambers.PlufinderApi.enumeration.ChamadoEnum;
 import br.com.fiap.ambers.PlufinderApi.enumeration.StatusEnum;
+import lombok.Getter;
+import lombok.Setter;
 
 
 @Entity
 @Table(name = "T_CHAMADO")
 @SequenceGenerator(name = "chamado", sequenceName="SQ_T_CHAMADO", allocationSize = 1)
+@Getter
+@Setter
 public class Chamado {
 	
 	@Id
@@ -51,24 +59,34 @@ public class Chamado {
 	private ChamadoEnum tipoChamado;
 	
 	@CreationTimestamp
-	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "dt_hr_chamado", updatable = false)
-	private Calendar dataEHora;	
+	private LocalDateTime dataEHora;	
 	
-	@ManyToMany(mappedBy = "chamados")
-	private List<Usuario> usuarios;
+	@ManyToOne
+	@JoinColumn(name = "id_usuario_solicitante")
+	private Usuario usuarioSolicitante;
+	
+	@ManyToOne
+	@JoinColumn(name = "id_usuario_solicitado")
+	private Usuario usuarioSolicitado;
 
 	public Chamado() {}
 
 	public Chamado(StatusEnum status, ChamadoEnum tipoChamado, Calendar dataEHora) {
 		this.status = status;
 		this.tipoChamado = tipoChamado;
-		this.dataEHora = dataEHora;
 	}
 
 	public Chamado(Long id, StatusEnum status, ChamadoEnum tipoChamado, Calendar dataEHora) {
 		this(status, tipoChamado, dataEHora);
 		this.id = id;
+	}
+	
+	public Chamado(CreateChamadoEntradaDto novoChamado, Usuario usuarioSolicitante) {
+		this.status = StatusEnum.PENDENTES;
+		this.tipoChamado = novoChamado.getTipoChamado();
+		this.dataEHora = LocalDateTime.now();
+		this.usuarioSolicitante = usuarioSolicitante;
 	}
 
 	public Long getId() {
@@ -95,22 +113,13 @@ public class Chamado {
 		this.tipoChamado = tipoChamado;
 	}
 
-	public Calendar getDataEHora() {
+	public LocalDateTime getDataEHora() {
 		return dataEHora;
 	}
 
-	public void setDataEHora(Calendar dataEHora) {
+	public void setDataEHora(LocalDateTime dataEHora) {
 		this.dataEHora = dataEHora;
 	}
 
-	public List<Usuario> getUsuarios() {
-		return usuarios;
-	}
-
-	public void setUsuarios(List<Usuario> usuarios) {
-		this.usuarios = usuarios;
-	}	
-	
-	
 	
 }

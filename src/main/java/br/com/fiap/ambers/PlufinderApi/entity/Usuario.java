@@ -10,6 +10,7 @@
 
 package br.com.fiap.ambers.PlufinderApi.entity;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -24,6 +25,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -65,11 +67,27 @@ public class Usuario implements UserDetails {
 	@Column(name = "nm_usuario", length = 100, nullable = false)
 	private String nome;
 	
-	@ManyToMany(cascade = CascadeType.PERSIST)
-	@JoinTable(name = "T_USU_CHAMADO",
-				joinColumns = @JoinColumn(name="id_usuario"),
-				inverseJoinColumns = @JoinColumn(name="id_chamado"))
-	private List<Chamado> chamados;
+	@OneToMany(mappedBy = "usuarioSolicitante", fetch = FetchType.LAZY, cascade = { CascadeType.REMOVE, CascadeType.MERGE } )
+	private List<Chamado> chamadosSolicitados;
+	
+	@OneToMany(mappedBy = "usuarioSolicitado", fetch = FetchType.LAZY, cascade = { CascadeType.REMOVE, CascadeType.MERGE } )
+	private List<Chamado> chamadosAtendidos;
+	
+	public void addChamadosSolicitados(Chamado chamado) {
+		if (chamadosSolicitados == null)
+			chamadosSolicitados = new ArrayList<Chamado>();
+		
+		chamadosSolicitados.add(chamado);
+		chamado.setUsuarioSolicitante(this);
+	}
+	
+	public void addChamadosAtendidos(Chamado chamado) {
+		if (chamadosAtendidos == null)
+			chamadosAtendidos = new ArrayList<Chamado>();
+		
+		chamadosAtendidos.add(chamado);
+		chamado.setUsuarioSolicitado(this);
+	}
 
 	public Long getId() {
 		return id;
@@ -117,14 +135,6 @@ public class Usuario implements UserDetails {
 
 	public void setLogin(Login login) {
 		this.login = login;
-	}
-
-	public List<Chamado> getChamados() {
-		return chamados;
-	}
-
-	public void setChamados(List<Chamado> chamados) {
-		this.chamados = chamados;
 	}
 
 	public Usuario(String nome2, Setor setor2, Cargo cargo2) {

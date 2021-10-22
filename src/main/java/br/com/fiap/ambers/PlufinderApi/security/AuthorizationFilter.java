@@ -53,7 +53,7 @@ public class AuthorizationFilter extends OncePerRequestFilter {
 
 	private void authorize(String token) throws EntityNotFoundException {
 		Long id = tokenService.getUserId(token);
-		Login login = loginService.buscarPorId(id).get();
+		Login login = loginService.buscarPorIdUsuario(id).get();
 
 		UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(login, null,
 				login.getAuthorities());
