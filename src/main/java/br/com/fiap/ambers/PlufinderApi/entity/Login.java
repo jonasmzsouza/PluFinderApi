@@ -68,9 +68,9 @@ public class Login implements UserDetails {
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		// TODO Auto-generated method stub
-		@SuppressWarnings("unchecked")
-		Collection<? extends GrantedAuthority> roles = (Collection<? extends GrantedAuthority>) new ArrayList<Role>();
-		return roles;
+//		@SuppressWarnings("unchecked")
+//		Collection<? extends GrantedAuthority> roles = (Collection<? extends GrantedAuthority>) new ArrayList<Role>();
+		return null;
 	}
 
 	@Override
