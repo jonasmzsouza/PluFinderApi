@@ -69,6 +69,10 @@ public class Chamado {
 	@ManyToOne
 	@JoinColumn(name = "id_usuario_solicitado")
 	private Usuario usuarioSolicitado;
+	
+	@ManyToOne
+	@JoinColumn(name = "id_setor_chamado")
+	private Setor setor;
 
 	public Chamado() {}
 
