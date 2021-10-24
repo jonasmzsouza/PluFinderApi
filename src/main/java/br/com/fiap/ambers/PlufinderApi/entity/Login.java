@@ -6,6 +6,10 @@
 
 package br.com.fiap.ambers.PlufinderApi.entity;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
+import javax.management.relation.Role;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,10 +22,20 @@ import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+
 @Entity
 @Table(name = "T_LOGIN")
 @SequenceGenerator(name = "login", sequenceName="SQ_T_LOGIN", allocationSize = 1)
-public class Login {
+@Getter
+@Setter
+@Data
+public class Login implements UserDetails {
 	
 	@Id
 	@Column(name="id_login", length = 10, nullable = false)
@@ -35,7 +49,6 @@ public class Login {
 	@Column(name = "ds_email", length = 200, nullable = false)
 	private String email;
 	
-	//TODO CRIPTOGRAFAR
 	@Column(name = "vl_senha", length = 1500, nullable = false)
 	private String senha;
 
@@ -52,38 +65,48 @@ public class Login {
 		this.id = id;
 	}
 
-	public Long getId() {
-		return id;
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		// TODO Auto-generated method stub
+		@SuppressWarnings("unchecked")
+		Collection<? extends GrantedAuthority> roles = (Collection<? extends GrantedAuthority>) new ArrayList<Role>();
+		return roles;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	@Override
+	public String getPassword() {
+		// TODO Auto-generated method stub
+		return this.senha;
 	}
 
-	public Usuario getUsuario() {
-		return usuario;
+	@Override
+	public String getUsername() {
+		// TODO Auto-generated method stub
+		return this.email;
 	}
 
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
+	@Override
+	public boolean isAccountNonExpired() {
+		// TODO Auto-generated method stub
+		return true;
 	}
 
-	public String getEmail() {
-		return email;
+	@Override
+	public boolean isAccountNonLocked() {
+		// TODO Auto-generated method stub
+		return true;
 	}
 
-	public void setEmail(String email) {
-		this.email = email;
+	@Override
+	public boolean isCredentialsNonExpired() {
+		// TODO Auto-generated method stub
+		return true;
 	}
 
-	public String getSenha() {
-		return senha;
-	}
-
-	public void setSenha(String senha) {
-		this.senha = senha;
-	}
-	
-	
+	@Override
+	public boolean isEnabled() {
+		// TODO Auto-generated method stub
+		return true;
+	}	
 	
 }
